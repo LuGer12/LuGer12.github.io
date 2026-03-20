@@ -162,3 +162,107 @@ html[data-lang="en"] .locale-es {
 	font-weight: bold;
 	color: white;
 }
+
+.cv-download-card {
+	position: relative;
+	overflow: hidden;
+	width: min(100%, 22rem);
+	min-height: 13rem;
+	padding: 1.25rem;
+	border-radius: 1rem;
+	border: 2px solid rgb(55 65 81 / 0.9);
+	background: radial-gradient(circle at 20% 20%, rgb(55 65 81 / 0.9), rgb(17 24 39));
+	transform: rotate(-6deg);
+	transition: transform 0.3s ease, box-shadow 0.3s ease;
+	box-shadow: 0 20px 40px rgb(15 23 42 / 0.35);
+	text-align: left;
+}
+
+.cv-download-card:hover {
+	transform: rotate(0deg) translateY(-4px);
+	box-shadow: 0 24px 50px rgb(15 23 42 / 0.45);
+}
+
+.cv-download-card-inner {
+	position: relative;
+	z-index: 2;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 1rem;
+}
+
+.cv-initials {
+	display: inline-block;
+	font-size: clamp(2rem, 5vw, 2.8rem);
+	line-height: 1;
+	font-weight: 800;
+	letter-spacing: -0.02em;
+}
+
+.cv-role {
+	margin-top: 0.25rem;
+	font-size: 0.9rem;
+	color: rgb(226 232 240);
+}
+
+.cv-download-button {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.6rem;
+	padding: 0.55rem 0.95rem;
+	border-radius: 9999px;
+	border: 1px solid rgb(226 232 240 / 0.7);
+	background: rgb(248 250 252);
+	color: rgb(15 23 42);
+	font-size: 0.9rem;
+	font-weight: 700;
+	transition: all 0.3s ease;
+	text-decoration: none;
+}
+
+.cv-download-button:hover {
+	background: rgb(15 23 42);
+	color: rgb(248 250 252);
+	border-color: rgb(148 163 184 / 0.8);
+}
+
+.cv-avatar {
+	position: absolute;
+	bottom: -0.4rem;
+	right: -4.5rem;
+	width: 11rem;
+	height: 11rem;
+	z-index: 1;
+	transition: transform 0.35s ease;
+	fill: rgb(248 250 252 / 0.95);
+}
+
+.cv-avatar-main {
+	stroke: rgb(15 23 42);
+	stroke-width: 4;
+	stroke-miterlimit: 10;
+}
+
+.cv-avatar-accent {
+	stroke: rgb(71 85 105);
+	stroke-width: 2;
+	stroke-miterlimit: 10;
+	transition-duration: 0.2s;
+}
+
+.cv-download-card:hover .cv-avatar {
+	transform: scale(1.12);
+}
+
+html.dark .cv-download-card {
+	border-color: rgb(100 116 139 / 0.7);
+	background: radial-gradient(circle at 20% 20%, rgb(51 65 85), rgb(2 6 23));
+}
+
+@media (max-width: 640px) {
+	.cv-download-card {
+		transform: rotate(0deg);
+		width: 100%;
+	}
+}
