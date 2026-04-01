@@ -2,7 +2,7 @@
 Educational implementation of a perceptron and multilayer neural networks for dataset classification. Includes training visualizations and a small inference API.
 
 ## Stack
-Python, TensorFlow, NumPy
+Python, PyTorch, NumPy
 
 ## Links
 Private
