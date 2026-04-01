@@ -8,6 +8,13 @@
 	--color-primary-dark: #4b5563;
 }
 
+:root {
+	--anim-fast: 180ms;
+	--anim-medium: 360ms;
+	--anim-slow: 600ms;
+	--anim-ease: cubic-bezier(.2,.9,.2,1);
+}
+
 html {
 	color-scheme: light dark;
 }
@@ -32,7 +39,8 @@ html[data-lang="en"] .locale-es {
 .fade-in {
 	opacity: 0;
 	transform: translateY(30px);
-	transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+	transition: opacity var(--anim-slow) var(--anim-ease), transform var(--anim-slow) var(--anim-ease);
+	will-change: opacity, transform;
 }
 
 .fade-in.visible {
@@ -55,6 +63,57 @@ html[data-lang="en"] .locale-es {
 .animated-border {
 	position: relative;
 }
+
+/* Entrance helpers */
+.enter-up {
+	opacity: 0;
+	transform: translateY(18px);
+	animation: slideUpFade var(--anim-medium) var(--anim-ease) forwards;
+}
+
+.enter-left {
+	opacity: 0;
+	transform: translateX(-18px);
+	animation: slideLeft var(--anim-medium) var(--anim-ease) forwards;
+}
+
+@keyframes slideUpFade {
+0% { opacity: 0; transform: translateY(18px); }
+100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideLeft {
+0% { opacity: 0; transform: translateX(-18px); }
+100% { opacity: 1; transform: translateX(0); }
+}
+
+/* Subtle floating effect for avatars or decorative SVGs */
+@keyframes floatY {
+0% { transform: translateY(0); }
+50% { transform: translateY(-6px); }
+100% { transform: translateY(0); }
+}
+
+.float-slow { animation: floatY 6s ease-in-out infinite; }
+
+/* Card tilt interaction (hardware accelerated) */
+.card-tilt {
+	transform: perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0);
+	transition: transform var(--anim-medium) var(--anim-ease), box-shadow var(--anim-medium) var(--anim-ease);
+	transform-style: preserve-3d;
+	will-change: transform;
+}
+.card-tilt:hover { transform: perspective(1000px) rotateX(4deg) rotateY(-4deg) translateZ(8px); box-shadow: 0 30px 60px rgba(2,6,23,0.38); }
+
+/* Button micro-interactions */
+.btn-press {
+	transition: transform var(--anim-fast) var(--anim-ease), box-shadow var(--anim-fast) var(--anim-ease);
+}
+.btn-press:active { transform: translateY(2px) scale(0.997); }
+
+/* Nav entrance */
+.nav-enter { transform: translateY(-8px); opacity: 0; animation: navEntrance var(--anim-medium) var(--anim-ease) forwards; }
+@keyframes navEntrance { 0% { transform: translateY(-8px); opacity: 0 } 100% { transform: translateY(0); opacity: 1 } }
 
 .animated-border::before {
 	content: '';
@@ -98,6 +157,12 @@ html[data-lang="en"] .locale-es {
 	100% {
 		transform: translateX(-50%);
 	}
+}
+
+/* Respect user preference for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+	:root { --anim-fast: 0ms; --anim-medium: 0ms; --anim-slow: 0ms; }
+	* { animation-duration: 0ms !important; animation-delay: 0ms !important; transition-duration: 0ms !important; scroll-behavior: auto !important; }
 }
 
 .tech-ticker-container {

@@ -2,7 +2,7 @@
 const currentPage = Astro.url.pathname;
 ---
 
-<nav class="fixed top-0 left-0 right-0 z-50 flex justify-center pt-3 sm:pt-6 px-4">
+<nav class="fixed top-0 left-0 right-0 z-50 flex justify-center pt-3 sm:pt-6 px-4 nav-enter">
 	<div class="backdrop-blur-md bg-white/80 dark:bg-gray-950/80 border border-gray-200 dark:border-gray-700 rounded-full px-4 sm:px-6 py-2 sm:py-3 flex items-center justify-between sm:justify-center gap-2 sm:gap-6 shadow-sm w-full sm:w-auto">
 		<!-- Desktop Links -->
 		<div class="hidden sm:flex items-center gap-6">
@@ -24,11 +24,11 @@ const currentPage = Astro.url.pathname;
 
 		<!-- Language and Theme Toggles -->
 		<div class="flex items-center gap-2">
-			<button id="lang-btn" onclick="window.toggleLang()" class="px-2 py-1 text-xs font-bold rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors cursor-pointer whitespace-nowrap">
+			<button id="lang-btn" onclick="window.toggleLang()" class="px-2 py-1 text-xs font-bold rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors cursor-pointer whitespace-nowrap btn-press">
 				EN
 			</button>
 
-			<button onclick="window.toggleTheme()" class="p-1 sm:p-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors cursor-pointer flex-shrink-0" aria-label="Toggle theme">
+			<button onclick="window.toggleTheme()" class="p-1 sm:p-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors cursor-pointer flex-shrink-0 btn-press" aria-label="Toggle theme">
 				<svg class="w-4 h-4 dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
 				</svg>
@@ -39,7 +39,7 @@ const currentPage = Astro.url.pathname;
 		</div>
 
 		<!-- Mobile Hamburger Button -->
-		<button id="mobile-menu-btn" class="sm:hidden p-1.5 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors cursor-pointer" aria-label="Toggle menu">
+		<button id="mobile-menu-btn" class="sm:hidden p-1.5 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors cursor-pointer btn-press" aria-label="Toggle menu">
 			<svg class="w-5 h-5" id="hamburger-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
 			</svg>

@@ -10,37 +10,49 @@ const translations = {
 };
 
 const workExperience = [
-    {
-        year: '01/2026 - Present',
-        yearES: '01/2026 - Actualidad',
-        title: 'Systems Analyst',
-        titleES: 'Analista de Sistemas',
-        company: 'Operations Maritime Fluvial Integral S.A.S.',
-        description: 'Systems analyst focused on web development, process analysis and business digitization. Led the development of the corporate website and participated in the definition, design and implementation of internal technological solutions, process automation and continuous improvement of systems, connecting operational needs with scalable technical solutions.',
-        descriptionES: 'Analista de sistemas con enfoque en desarrollo web, análisis de procesos y digitalización empresarial. Lideré el desarrollo de la web corporativa y participo en la definición, diseño e implementación de soluciones tecnológicas internas, automatización de procesos y mejora continua de sistemas, conectando necesidades operativas con soluciones técnicas escalables.'
-    },
-    {
-        year: '01/2025 - 06/2025',
-        yearES: '01/2025 - 06/2025',
-        title: 'Fullstack Developer',
-        titleES: 'Desarrollador Fullstack',
-        company: 'Ingeniería Sistemas y Servicios E.U.',
-        description: 'Developed end-to-end web applications using Django and React, integrating REST APIs and PostgreSQL. Notable projects: reporting system with export to Excel/JSON/PDF/XML; hotel room management dashboard; dynamic report generator with web filters; image analysis module using Python and OpenCV.',
-        descriptionES: 'Desarrollé aplicaciones web de extremo a extremo utilizando Django y React, integrando Api REST, bases de datos relacionales (PostgreSQL) y componentes interactivos. Entre los proyectos destacados: Sistema de reportes con exportación a Excel, JSON, PDF y XML. Dashboard para la gestión de habitaciones de hotel. Generador de reportes dinámicos con filtros web. Módulo de análisis de imágenes con Python y OpenCV.'
-    },
-    {
-        year: '06/2023 - 12/2024',
-        yearES: '06/2023 - 12/2024',
-        title: 'Freelance Developer & IT Consultant',
-        titleES: 'Desarrollador y Consultor de TI Freelance',
-        company: 'Freelance',
-        description: 'Managed and executed software and web projects for local businesses: desktop and web applications for inventory, orders and production. Highlight: Java application for jewelry calculations (measures and weights), optimizing resources. Also provided web development, technical support and IT consulting.',
-        descriptionES: 'Gestión y ejecución de proyectos de desarrollo de software, sitios web y soporte técnico para negocios locales, adaptando cada solución a las necesidades del cliente. Desarrollo de Software Específico: Creación de aplicaciones de escritorio y web para gestión de inventarios, pedidos y producción. Destaca una aplicación en Java para joyería que calculaba medidas y pesos exactos de materiales.'
-    }
+	{
+		year: 'Aug 2025 - Dec 2025',
+		yearES: 'Ago 2025 - Dic 2025',
+		title: 'Systems Engineering Intern',
+		titleES: 'Pasantía de Ingeniería de Sistemas',
+		company: 'Unidad Oftalmológica de Caracas',
+		description: 'Internship focused on automating internal clinical processes: distribution, visualization and digital delivery of studies and medical reports. Implemented a React + Electron interface, a NestJS backend as the logical core, and a MongoDB NoSQL database for data modeling. Used Git/GitHub for version control. The solution optimized information management and reduced manual steps.',
+		descriptionES: 'Desarrollo de un sistema para la automatización de procesos internos en un entorno clínico, enfocado en la distribución, visualización y envío digital de estudios e informes médicos. La solución optimizó la gestión de información y redujo procesos manuales. Se implementó una interfaz con React y Electron, con un backend desarrollado en NestJS como núcleo lógico del sistema y una base de datos NoSQL en MongoDB para el modelado y organización de datos. Se utilizó Git y GitHub para el control de versiones.'
+	}
 ];
+
+// Load certifications from assets (PDFs/images) — eager so values are URLs (strings)
+const certs = import.meta.glob('../assets/Certificaciones/*.{pdf,png,jpg,jpeg}', { as: 'url', eager: true });
+const rawCerts = Object.keys(certs).map(path => {
+	const parts = path.split('/');
+	const filename = parts[parts.length - 1];
+	const match = filename.match(/^(.*)\.([^.]+)$/);
+	const base = match ? match[1] : filename;
+	const ext = match ? match[2].toLowerCase() : '';
+	return {
+		path,
+		filename,
+		base,
+		ext,
+		url: certs[path]
+	};
+});
+
+// For PDFs, try to find an image with same base name to use as thumbnail
+const certList = rawCerts.map(c => {
+	if (c.ext === 'pdf') {
+		const thumb = rawCerts.find(r => (r.base === c.base) && (r.ext === 'png' || r.ext === 'jpg' || r.ext === 'jpeg'));
+		return { name: c.filename, url: c.url, thumb: thumb ? thumb.url : null };
+	}
+	// image files use themselves as thumb
+	if (['png', 'jpg', 'jpeg'].includes(c.ext)) {
+		return { name: c.filename, url: c.url, thumb: c.url };
+	}
+	return { name: c.filename, url: c.url, thumb: null };
+});
 ---
 
-<Layout title={`Work | Javier Castillo`}>
+<Layout title={`Work | Luis Garnica`}>
 	<Header />
 	
 	<main class="min-h-screen px-4 sm:px-6 md:px-6">
@@ -58,7 +70,7 @@ const workExperience = [
 			<div class="space-y-8 sm:space-y-12 parallax-section">
 				{
 					workExperience.map((work, index) => (
-						<div class="relative pl-6 sm:pl-8 border-l-2 border-gray-200 dark:border-gray-700 bg-transparent group cursor-pointer hover:scale-105 transition-all">
+						<div class="relative pl-6 sm:pl-8 border-l-2 border-gray-200 dark:border-gray-700 bg-transparent group cursor-pointer hover:scale-105 transition-all enter-up card-tilt">
 							<div class="absolute -left-2 top-0 w-4 h-4 rounded-full bg-gray-400 dark:bg-gray-500 group-hover:scale-125 transition-transform"></div>
 							<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2 gap-2 sm:gap-0">
 								<h3 class="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white" data-en={work.title} data-es={work.titleES}>{work.title}</h3>
@@ -69,9 +81,44 @@ const workExperience = [
 						</div>
 					))
 				}
+				
+				<!-- Certifications gallery -->
+				<section class="pt-8">
+					<h2 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">Certifications</h2>
+					<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+						{certList.map((c) => (
+								<a href={c.url} target="_blank" data-url={c.url} data-name={c.name} class="relative block p-4 border rounded-lg bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 overflow-hidden hover:scale-105 transition-transform">
+									<div class="flex items-center gap-3">
+										{c.thumb ? (
+											<img src={c.thumb} alt={c.name} class="w-20 h-14 object-cover rounded-md flex-shrink-0" />
+										) : (
+											<div class="w-20 h-14 bg-gray-100 dark:bg-gray-700 rounded-md flex items-center justify-center text-xs text-gray-500">No preview</div>
+										)}
+										<div class="flex-1 min-w-0">
+											<p class="text-sm font-medium text-gray-900 dark:text-white truncate">{c.name}</p>
+										</div>
+										<button type="button" class="preview-btn ml-2 px-3 py-1 text-xs font-semibold rounded bg-gray-900 text-white dark:bg-white dark:text-gray-900">Preview</button>
+									</div>
+								</a>
+							))}
+					</div>
+				</section>
 			</div>
 		</section>
 	</main>
+
+	<!-- Preview modal -->
+	<div id="previewModal" class="hidden fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
+		<div class="bg-white dark:bg-gray-900 rounded-lg overflow-hidden w-full max-w-4xl h-[80vh] shadow-lg">
+			<div class="flex items-center justify-between px-4 py-2 border-b border-gray-200 dark:border-gray-800">
+				<h3 id="previewTitle" class="text-sm font-semibold text-gray-900 dark:text-white">Preview</h3>
+				<button id="closePreview" class="px-3 py-1 text-sm font-medium text-gray-700 dark:text-gray-200">Close</button>
+			</div>
+			<div id="previewContent" class="w-full h-full bg-gray-50 dark:bg-gray-800 p-4 overflow-auto flex items-center justify-center">
+				<!-- dynamic preview inserted here -->
+			</div>
+		</div>
+	</div>
 
 	<Footer />
 
@@ -99,9 +146,72 @@ const workExperience = [
 				const scrolled = window.pageYOffset;
 				document.querySelectorAll('.parallax-section').forEach(section => {
 					const speed = 0.05;
-					(section as HTMLElement).style.transform = `translateY(${scrolled * speed}px)`;
+					section.style.transform = `translateY(${scrolled * speed}px)`;
 				});
 			});
+
+			// Preview modal wiring
+			const modal = document.getElementById('previewModal');
+			const previewContent = document.getElementById('previewContent');
+			const previewTitle = document.getElementById('previewTitle');
+			const closePreview = document.getElementById('closePreview');
+
+			document.querySelectorAll('.preview-btn').forEach(btn => {
+				btn.addEventListener('click', (ev) => {
+					ev.preventDefault();
+					const anchor = btn.closest('a');
+					if (!anchor) return;
+					const url = anchor.getAttribute('data-url');
+					const name = anchor.getAttribute('data-name') || 'Preview';
+					openPreview(url, name);
+				});
+			});
+
+			function openPreview(url, name) {
+				if (!modal || !previewContent || !previewTitle) return;
+				if (!url) return;
+				previewTitle.textContent = name;
+				previewContent.innerHTML = '';
+				if (/\.(png|jpe?g)$/i.test(url)) {
+					const img = document.createElement('img');
+					img.src = url;
+					img.className = 'max-h-[72vh] w-auto object-contain';
+					previewContent.appendChild(img);
+				} else if (/\.pdf$/i.test(url)) {
+					const iframe = document.createElement('iframe');
+					iframe.src = url;
+					iframe.style.width = '100%';
+					iframe.style.height = '100%';
+					iframe.className = 'min-h-[70vh]';
+					previewContent.appendChild(iframe);
+				} else {
+					const link = document.createElement('a');
+					link.href = url;
+					link.target = '_blank';
+					link.textContent = 'Open file';
+					previewContent.appendChild(link);
+				}
+				modal.classList.remove('hidden');
+				modal.classList.add('flex');
+			}
+
+			if (closePreview) {
+				closePreview.addEventListener('click', () => {
+					if (!modal || !previewContent) return;
+					modal.classList.add('hidden');
+					modal.classList.remove('flex');
+					previewContent.innerHTML = '';
+				});
+			}
+
+			// close when clicking outside the modal content
+			if (modal) {
+				modal.addEventListener('click', (e) => {
+					if (e.target === modal) {
+						if (closePreview) closePreview.click();
+					}
+				});
+			}
 		});
 	</script>
 </Layout>

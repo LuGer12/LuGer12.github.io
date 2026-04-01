@@ -4,7 +4,7 @@ import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 
 export async function getStaticPaths() {
-    const esDescriptions = import.meta.glob('../../project-descriptions/*/descripcion.md', { query: '?raw', import: 'default' });
+	const esDescriptions = import.meta.glob('../../project-descriptions/*/descripcion.md', { as: 'raw' });
     
     return Object.keys(esDescriptions).map(path => {
         const parts = path.split('/');
@@ -18,11 +18,14 @@ export async function getStaticPaths() {
 const { project } = Astro.params;
 
 // Load descriptions from the new location
-const esDescriptions = import.meta.glob('../../project-descriptions/*/descripcion.md', { query: '?raw', import: 'default' });
-const enDescriptions = import.meta.glob('../../project-descriptions/*/descripcion.en.md', { query: '?raw', import: 'default' });
+const esDescriptions = import.meta.glob('../../project-descriptions/*/descripcion.md', { as: 'raw' });
+const enDescriptions = import.meta.glob('../../project-descriptions/*/descripcion.en.md', { as: 'raw' });
 
-const esContent = await esDescriptions[`../../project-descriptions/${project}/descripcion.md`]() as string;
-const enContent = await enDescriptions[`../../project-descriptions/${project}/descripcion.en.md`]() as string;
+const esLoader = esDescriptions[`../../project-descriptions/${project}/descripcion.md`];
+const enLoader = enDescriptions[`../../project-descriptions/${project}/descripcion.en.md`];
+
+const esContent = esLoader ? await esLoader() as string : '';
+const enContent = enLoader ? await enLoader() as string : '';
 
 // Load images
 const allImages = import.meta.glob('../../assets/*/*.{png,jpg,jpeg,webp}', { eager: true });
@@ -40,15 +43,53 @@ const translations = {
 };
 
 function parseProjectData(content: string) {
-    const lines = content.split('\n');
-    const title = lines[0].replace(/# /g, '').trim();
-    const summary = lines[1].trim();
-    
-    const stackIndex = lines.findIndex(l => l.includes('## Stack'));
-    const linksIndex = lines.findIndex(l => l.includes('## Links'));
-    
-    const stack = stackIndex !== -1 ? lines[stackIndex + 1].split(',').map(s => s.trim()) : [];
-    const linksRaw = linksIndex !== -1 ? lines.slice(linksIndex + 1).filter(l => l.trim()) : [];
+	if (!content || typeof content !== 'string') {
+		return { title: '', summary: '', stack: [], links: [] };
+	}
+
+	const lines = content.split('\n');
+	const title = (lines[0] || '').replace(/### |# /g, '').trim();
+	// summary: take the first non-empty line after the title
+	let summary = '';
+	for (let i = 1; i < Math.min(lines.length, 6); i++) {
+		if (lines[i] && lines[i].trim()) {
+			summary = lines[i].trim();
+			break;
+		}
+	}
+
+	// detect stack header (support ES/EN variants)
+	const stackIndex = lines.findIndex(l => /##\s*(Stack|Technologies|Tecnolog|Tecnologías|Tecnologias)/i.test(l));
+	// detect links header (support ES/EN)
+	const linksIndex = lines.findIndex(l => /##\s*(Links|Enlaces)/i.test(l));
+
+	let stackLines: string[] = [];
+	if (stackIndex !== -1) {
+		let i = stackIndex + 1;
+		while (i < lines.length && lines[i] && !lines[i].startsWith('##')) {
+			if (lines[i].trim()) stackLines.push(lines[i].trim());
+			i++;
+		}
+	}
+
+	// parse stackLines: handle bullets, 'Tech: percent' or comma-separated
+	let stack: string[] = [];
+	if (stackLines.length === 1 && stackLines[0].includes(',')) {
+		stack = stackLines[0].split(',').map(s => s.trim()).filter(Boolean);
+	} else {
+		stack = stackLines.flatMap(line => {
+			if (line.startsWith('-')) {
+				const v = line.replace(/^[-\*]\s*/, '');
+				// if contains ':' take left part
+				if (v.includes(':')) return [v.split(':')[0].trim()];
+				return [v.trim()];
+			}
+			if (line.includes(':')) return [line.split(':')[0].trim()];
+			return [line.trim()];
+		}).filter(Boolean);
+	}
+
+	const linksRaw = linksIndex !== -1 ? lines.slice(linksIndex + 1).filter(l => l.trim()) : [];
     
     const links = linksRaw.map(l => {
         const match = l.match(/\[(.*)\]\((.*)\)/);
@@ -56,14 +97,14 @@ function parseProjectData(content: string) {
         return { label: l.trim(), url: null };
     });
 
-    return { title, summary, stack, links };
+	return { title, summary, stack, links };
 }
 
 const esData = parseProjectData(esContent);
 const enData = parseProjectData(enContent);
 ---
 
-<Layout title={`${project} | Javier Castillo`}>
+<Layout title={`${project} | Luis Garnica`}>
 	<Header />
 	
 	<main class="min-h-screen px-4 sm:px-6 md:px-6">
