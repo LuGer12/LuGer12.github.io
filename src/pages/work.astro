@@ -11,18 +11,23 @@ const translations = {
 
 const workExperience = [
 	{
-		year: 'Aug 2025 - Dec 2025',
-		yearES: 'Ago 2025 - Dic 2025',
+		year: 'Aug 2025 - Aug 2026',
+		yearES: 'Ago 2025 - Ago 2026',
 		title: 'Systems Engineering Intern',
 		titleES: 'Pasantía de Ingeniería de Sistemas',
 		company: 'Unidad Oftalmológica de Caracas',
-		description: 'Internship focused on automating internal clinical processes: distribution, visualization and digital delivery of studies and medical reports. Implemented a React + Electron interface, a NestJS backend as the logical core, and a MongoDB NoSQL database for data modeling. Used Git/GitHub for version control. The solution optimized information management and reduced manual steps.',
-		descriptionES: 'Desarrollo de un sistema para la automatización de procesos internos en un entorno clínico, enfocado en la distribución, visualización y envío digital de estudios e informes médicos. La solución optimizó la gestión de información y redujo procesos manuales. Se implementó una interfaz con React y Electron, con un backend desarrollado en NestJS como núcleo lógico del sistema y una base de datos NoSQL en MongoDB para el modelado y organización de datos. Se utilizó Git y GitHub para el control de versiones.'
+		description: 'Designed and developed an internal process automation system for a clinical environment, optimizing information management and drastically reducing manual workflows for the distribution of medical reports and studies by 35%. Built an intuitive desktop interface with React and Electron, developed the backend with NestJS as the system core, and integrated MongoDB as a NoSQL database for secure, organized, and scalable data modeling. Designed and configured n8n workflows for WhatsApp response automation, improving direct communication with patients and ensuring immediate information delivery. Managed version control and the software development lifecycle with Git and GitHub, ensuring traceability and organized feature integration.',
+		descriptionES: 'Diseñé y desarrollé un sistema de automatización de procesos internos para un entorno clínico, optimizando la gestión de información y reduciendo drásticamente los flujos de trabajo manuales en la distribución de informes y estudios médicos en un 35%. Implementé una interfaz de escritorio intuitiva y dinámica utilizando React y Electron, facilitando la visualización, administración y el envío digital eficiente de informes médicos. Construí el backend de la solución utilizando NestJS como núcleo lógico del sistema, integrando una base de datos NoSQL con MongoDB para garantizar un modelado de datos seguro, organizado y escalable. Diseñé y configuré flujos de trabajo en n8n para la automatización de respuestas por WhatsApp, agilizando la comunicación directa con los pacientes y asegurando entregas de información inmediatas. Gestioné el control de versiones y el ciclo de vida del desarrollo de software a través de Git y GitHub, asegurando la trazabilidad del código y la integración de nuevas funcionalidades de manera organizada.'
 	}
 ];
 
 // Load certifications from assets (PDFs/images) — eager so values are URLs (strings)
 const certs = import.meta.glob('../assets/Certificaciones/*.{pdf,png,jpg,jpeg}', { as: 'url', eager: true });
+const formatCertName = (filename: string) => filename
+	.replace(/\.[^.]+$/, '')
+	.replace(/[._-]+/g, ' ')
+	.replace(/\s+/g, ' ')
+	.trim();
 const rawCerts = Object.keys(certs).map(path => {
 	const parts = path.split('/');
 	const filename = parts[parts.length - 1];
@@ -32,6 +37,7 @@ const rawCerts = Object.keys(certs).map(path => {
 	return {
 		path,
 		filename,
+		displayName: formatCertName(filename),
 		base,
 		ext,
 		url: certs[path]
@@ -42,13 +48,13 @@ const rawCerts = Object.keys(certs).map(path => {
 const certList = rawCerts.map(c => {
 	if (c.ext === 'pdf') {
 		const thumb = rawCerts.find(r => (r.base === c.base) && (r.ext === 'png' || r.ext === 'jpg' || r.ext === 'jpeg'));
-		return { name: c.filename, url: c.url, thumb: thumb ? thumb.url : null };
+		return { name: c.displayName, url: c.url, thumb: thumb ? thumb.url : null, type: 'pdf' };
 	}
 	// image files use themselves as thumb
 	if (['png', 'jpg', 'jpeg'].includes(c.ext)) {
-		return { name: c.filename, url: c.url, thumb: c.url };
+		return { name: c.displayName, url: c.url, thumb: c.url, type: 'image' };
 	}
-	return { name: c.filename, url: c.url, thumb: null };
+	return { name: c.displayName, url: c.url, thumb: null, type: 'file' };
 });
 ---
 
@@ -87,19 +93,24 @@ const certList = rawCerts.map(c => {
 					<h2 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">Certifications</h2>
 					<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 						{certList.map((c) => (
-								<a href={c.url} target="_blank" data-url={c.url} data-name={c.name} class="relative block p-4 border rounded-lg bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 overflow-hidden hover:scale-105 transition-transform">
-									<div class="flex items-center gap-3">
+								<div class="relative block p-4 border rounded-lg bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 overflow-hidden hover:scale-[1.02] transition-transform">
+									<div class="mb-3 rounded-md overflow-hidden border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
 										{c.thumb ? (
-											<img src={c.thumb} alt={c.name} class="w-20 h-14 object-cover rounded-md flex-shrink-0" />
+											<img src={c.thumb} alt={c.name} class="w-full h-28 object-cover block" loading="lazy" />
+										) : c.type === 'pdf' ? (
+											<iframe src={`${c.url}#page=1&zoom=page-width`} title={c.name} class="w-full h-28 block pointer-events-none bg-white dark:bg-gray-900" loading="lazy"></iframe>
 										) : (
-											<div class="w-20 h-14 bg-gray-100 dark:bg-gray-700 rounded-md flex items-center justify-center text-xs text-gray-500">No preview</div>
+											<div class="w-full h-28 bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-xs text-gray-500">No preview</div>
 										)}
+									</div>
+									<div class="flex items-start gap-3">
 										<div class="flex-1 min-w-0">
 											<p class="text-sm font-medium text-gray-900 dark:text-white truncate">{c.name}</p>
+											<p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Small preview</p>
 										</div>
-										<button type="button" class="preview-btn ml-2 px-3 py-1 text-xs font-semibold rounded bg-gray-900 text-white dark:bg-white dark:text-gray-900">Preview</button>
+										<button type="button" class="preview-btn ml-2 px-3 py-1 text-xs font-semibold rounded bg-gray-900 text-white dark:bg-white dark:text-gray-900" data-url={c.url} data-name={c.name}>Preview</button>
 									</div>
-								</a>
+								</div>
 							))}
 					</div>
 				</section>
@@ -146,7 +157,7 @@ const certList = rawCerts.map(c => {
 				const scrolled = window.pageYOffset;
 				document.querySelectorAll('.parallax-section').forEach(section => {
 					const speed = 0.05;
-					section.style.transform = `translateY(${scrolled * speed}px)`;
+					(section as HTMLElement).style.transform = `translateY(${scrolled * speed}px)`;
 				});
 			});
 
@@ -159,15 +170,13 @@ const certList = rawCerts.map(c => {
 			document.querySelectorAll('.preview-btn').forEach(btn => {
 				btn.addEventListener('click', (ev) => {
 					ev.preventDefault();
-					const anchor = btn.closest('a');
-					if (!anchor) return;
-					const url = anchor.getAttribute('data-url');
-					const name = anchor.getAttribute('data-name') || 'Preview';
+					const url = btn.getAttribute('data-url');
+					const name = btn.getAttribute('data-name') || 'Preview';
 					openPreview(url, name);
 				});
 			});
 
-			function openPreview(url, name) {
+			function openPreview(url: string | null, name: string) {
 				if (!modal || !previewContent || !previewTitle) return;
 				if (!url) return;
 				previewTitle.textContent = name;

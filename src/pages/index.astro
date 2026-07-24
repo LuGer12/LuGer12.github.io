@@ -3,8 +3,8 @@ import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import heroPhoto from '../assets/WhatsApp Image 2026-03-14 at 2.12.00 PM.jpeg?url';
-import luisCvEs from '../assets/CV/CV LUIS GARNICA.pdf?url';
-import luisCvEn from '../assets/CV/CV LUIS GARNICA ENG.pdf?url';
+import luisCvEs from '../assets/CV/CV-LuisGarnica.pdf?url';
+import luisCvEn from '../assets/CV/CV-LuisGarnica(EN).pdf?url';
 
 const translations = {
   greeting: { 
@@ -16,8 +16,8 @@ const translations = {
     es: "Luis Garnica" 
   },
   description: { 
-		en: "Full Stack Developer and future Systems Engineer, specialized in cross-platform development and process automation using AI and n8n. I have experience creating comprehensive clinical systems while working with agile and traditional methodologies. I focus on building modern technological solutions with rigorous attention to detail to ensure the best user and patient experience.", 
-		es: "Desarrollador Full Stack y próximo Ingeniero de Sistemas, especializado en el desarrollo multiplataforma y la automatización de procesos utilizando IA y n8n. Cuento con experiencia en la creación de sistemas clínicos integrales trabajando con metodologías ágiles y tradicionales. Centrado en construir soluciones tecnológicas modernas con una rigurosa atención al detalle para garantizar la mejor experiencia del usuario y del paciente." 
+		en: "Systems Engineer specialized in cross-platform software development, process automation, and high-impact technology solutions. I specialize in building dynamic native interfaces using ReactJS, Flutter, and Dart, with a strong command of Python, Java, and JavaScript. I have experience designing relational and NoSQL data architectures, as well as implementing neural network models and automated workflow pipelines. I am accustomed to working with Git/GitHub under agile and traditional methodologies to optimize processes and solve complex problems.", 
+		es: "Ingeniero de sistemas especializado en el desarrollo de software multiplataforma, automatización de procesos y soluciones tecnológicas de alto impacto. Especialista en la creación de interfaces dinámicas y nativas utilizando ReactJS, Flutter y Dart, con un sólido dominio de Python, Java y JavaScript. Cuento con experiencia en el diseño de arquitecturas de datos relacionales y NoSQL, así como en la implementación de modelos de redes neuronales y flujos de trabajo automatizados. Habituado a trabajar con Git/GitHub bajo metodologías ágiles y tradicionales para optimizar procesos y resolver problemas complejos." 
   },
   availability: {
     en: "Open to work",
@@ -44,7 +44,7 @@ const translations = {
     es: "Sobre mí" 
   },
   aboutDesc: {
-		es: "Soy Estudiante de último trimestre de Ingeniería de Sistemas con enfoque en el desarrollo de software multiplataforma, la automatización de procesos y soluciones basadas en computación emergente. Especialista en la creación de interfaces dinámicas y nativas utilizando ReactJS, Flutter y Dart, complementado con un sólido dominio de Python, Java y JavaScript. Experiencia en el diseño y gestión de arquitecturas de datos relacionales y NoSQL, así como en la implementación de modelos de redes neuronales y flujos de trabajo automatizados. Conocimiento en uso de Git/GitHub bajo metodologías ágiles y tradicionales, orientado a optimizar procesos tecnológicos y desarrollar soluciones innovadoras de alto impacto.",
+		es: "Soy estudiante de último trimestre de Ingeniería de Sistemas con enfoque en el desarrollo de software multiplataforma, la automatización de procesos y soluciones basadas en computación emergente. Especialista en la creación de interfaces dinámicas y nativas utilizando ReactJS, Flutter y Dart, complementado con un sólido dominio de Python, Java y JavaScript. Experiencia en el diseño y gestión de arquitecturas de datos relacionales y NoSQL, así como en la implementación de modelos de redes neuronales y flujos de trabajo automatizados. Conocimiento en uso de Git/GitHub bajo metodologías ágiles y tradicionales, orientado a optimizar procesos tecnológicos y desarrollar soluciones innovadoras de alto impacto.",
 		en: "I am a final-term Systems Engineering student focused on cross-platform software development, process automation, and solutions based on emerging computing. I specialize in building dynamic, native interfaces with ReactJS, Flutter, and Dart, complemented by strong proficiency in Python, Java, and JavaScript. I have experience designing and managing relational and NoSQL data architectures, as well as implementing neural network models and automated workflow pipelines. Familiar with Git/GitHub under agile and traditional methodologies, I am driven to optimize technological processes and deliver high-impact innovative solutions."
   },
   tech: { 
@@ -75,8 +75,8 @@ const translations = {
 					<h1 class="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4 sm:mb-6 px-2 sm:px-0" data-en={translations.name.en} data-es={translations.name.es}>
 						{translations.name.en}
 					</h1>
-					<p class="text-sm sm:text-base text-gray-600 dark:text-gray-400 max-w-lg mx-auto mb-4 sm:mb-6 px-2 sm:px-0" data-en="Full Stack Developer and future Systems Engineer, specialized in cross-platform development and process automation using AI and n8n. I have experience creating comprehensive clinical systems while working with agile and traditional methodologies. I focus on building modern technological solutions with rigorous attention to detail to ensure the best user and patient experience." data-es="Desarrollador Full Stack y próximo Ingeniero de Sistemas, especializado en el desarrollo multiplataforma y la automatización de procesos utilizando IA y n8n. Cuento con experiencia en la creación de sistemas clínicos integrales trabajando con metodologías ágiles y tradicionales. Centrado en construir soluciones tecnológicas modernas con una rigurosa atención al detalle para garantizar la mejor experiencia del usuario y del paciente.">
-						<span class="font-semibold text-gray-900 dark:text-white">Full Stack Developer and future Systems Engineer</span> specialized in cross-platform development and process automation using <span class="font-semibold text-gray-900 dark:text-white">AI</span> and <span class="font-semibold text-gray-900 dark:text-white">n8n</span>. I have experience creating comprehensive clinical systems while working with agile and traditional methodologies. I focus on building modern technological solutions with rigorous attention to detail to ensure the best user and patient experience.
+					<p class="text-sm sm:text-base text-gray-600 dark:text-gray-400 max-w-lg mx-auto mb-4 sm:mb-6 px-2 sm:px-0" data-en={translations.description.en} data-es={translations.description.es}>
+						{translations.description.en}
 					</p>
 					<div class="flex flex-wrap gap-2 sm:gap-3 justify-center px-2 sm:px-0">
 						<a href="/projects" class="cursor-pointer px-4 sm:px-5 py-2 sm:py-2.5 text-sm sm:text-base bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-medium rounded-full hover:animated-bg transition-all btn-press" data-en={translations.viewProjects.en} data-es={translations.viewProjects.es}>
@@ -113,7 +113,7 @@ const translations = {
 			</div>
 		</section>
 
-		<section class="max-w-3xl mx-auto py-12 sm:py-16 border-t border-gray-200 dark:border-gray-700 parallax-section fade-in px-2 sm:px-0">
+		<section class="max-w-3xl mx-auto py-12 sm:py-16 border-t border-gray-200 dark:border-gray-700 fade-in px-2 sm:px-0">
 			<h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6 sm:mb-8" data-en={translations.about.en} data-es={translations.about.es}>{translations.about.en}</h2>
 			<div class="space-y-3 sm:space-y-4 text-base sm:text-lg leading-relaxed text-gray-600 dark:text-gray-400" data-en={translations.aboutDesc.en} data-es={translations.aboutDesc.es}>
 				{translations.aboutDesc.en}
@@ -173,6 +173,9 @@ const translations = {
 
 					<div class="cursor-pointer px-4 py-2 rounded-full bg-transparent border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all hover:scale-105 whitespace-nowrap">
 						<p class="text-sm font-medium text-gray-900 dark:text-white">Excel</p>
+					</div>
+					<div class="cursor-pointer px-4 py-2 rounded-full bg-transparent border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all hover:scale-105 whitespace-nowrap">
+						<p class="text-sm font-medium text-gray-900 dark:text-white">Power BI</p>
 					</div>
 
 					<div class="cursor-pointer px-4 py-2 rounded-full bg-transparent border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all hover:scale-105 whitespace-nowrap">
@@ -248,6 +251,9 @@ const translations = {
 
 					<div class="cursor-pointer px-4 py-2 rounded-full bg-transparent border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all hover:scale-105 whitespace-nowrap">
 						<p class="text-sm font-medium text-gray-900 dark:text-white">Excel</p>
+					</div>
+					<div class="cursor-pointer px-4 py-2 rounded-full bg-transparent border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all hover:scale-105 whitespace-nowrap">
+						<p class="text-sm font-medium text-gray-900 dark:text-white">Power BI</p>
 					</div>
 
 					<div class="cursor-pointer px-4 py-2 rounded-full bg-transparent border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all hover:scale-105 whitespace-nowrap">
